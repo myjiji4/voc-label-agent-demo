@@ -80,6 +80,8 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--limit", type=int, default=0)
     ap.add_argument("--workers", type=int, default=4)
+    ap.add_argument("--score-only", action="store_true",
+                    help="score data/demo_predictions.jsonl instead of calling a model")
     args = ap.parse_args()
 
     tax = Taxonomy(os.path.join(ROOT, "data", "taxonomy.json"))
@@ -88,15 +90,19 @@ def main():
     if args.limit:
         rows = rows[:args.limit]
 
-    client = LLMClient()
-    print("demo: %d reviews, %d examples, model=%s" % (len(rows), len(examples), client.model), flush=True)
-
     preds = []
-    with ThreadPoolExecutor(max_workers=max(1, args.workers)) as ex:
-        futs = [ex.submit(label_one, client, tax, examples, r) for r in rows]
-        for f in as_completed(futs):
-            preds.append(f.result())
-            print("done %d/%d" % (len(preds), len(rows)), flush=True)
+    if args.score_only:
+        cached = {x["id"]: x for x in load_jsonl(os.path.join(ROOT, "data", "demo_predictions.jsonl"))}
+        preds = [cached[r["id"]] for r in rows if r["id"] in cached]
+        print("demo: %d reviews, model=cached (no API call)" % len(rows), flush=True)
+    else:
+        client = LLMClient()
+        print("demo: %d reviews, %d examples, model=%s" % (len(rows), len(examples), client.model), flush=True)
+        with ThreadPoolExecutor(max_workers=max(1, args.workers)) as ex:
+            futs = [ex.submit(label_one, client, tax, examples, r) for r in rows]
+            for f in as_completed(futs):
+                preds.append(f.result())
+                print("done %d/%d" % (len(preds), len(rows)), flush=True)
     order = {r["id"]: i for i, r in enumerate(rows)}
     preds.sort(key=lambda p: order.get(p["id"], 0))
 

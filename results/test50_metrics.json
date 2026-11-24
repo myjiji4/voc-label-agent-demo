@@ -1,0 +1,10 @@
+{
+  "n": 50,
+  "exact_match": 0.8,
+  "correct": 40,
+  "wilson_ci95": [
+    0.6696,
+    0.8876
+  ],
+  "note": "Label-only export: review text is withheld. Exact match is recomputable; label correctness still needs the private text."
+}

@@ -1,5 +1,9 @@
 # Decision log
 
+> Repository note: this is a published snapshot. The iteration below happened
+> locally on 2026-11-23/24 and was not preserved as per-round commits. See
+> `docs/ITERATION_LOG.md` for the dated record. History was not rewritten.
+
 This is the short, honest version of how the v3 prompt was reached. The useful
 part is the sequence, not the final text.
 
