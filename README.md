@@ -76,7 +76,7 @@ demo_01 | 产品问题/产品完全不能用 | 产品问题/产品完全不能�
 ```
 
 No model call is made at import time; the package only depends on `requests` at
-runtime. Python 3.8+.
+runtime. Python 3.9+.
 
 ---
 

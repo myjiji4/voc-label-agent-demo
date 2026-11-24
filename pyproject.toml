@@ -7,7 +7,7 @@ name = "voc-label-agent"
 version = "0.1.0"
 description = "A small, evaluation-first VOC labeling agent with human review routing"
 readme = "README.md"
-requires-python = ">=3.8"
+requires-python = ">=3.9"
 license = {text = "MIT"}
 authors = [{name = "myjiji4"}]
 dependencies = ["requests>=2.25"]
